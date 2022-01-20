@@ -27,5 +27,5 @@ export declare type Carousel = {
 export interface CarouselProps {
     data: Carousel;
 }
-declare const Carousel: React.FC<CarouselProps>;
-export default Carousel;
+declare const CarouselComponent: React.FC<CarouselProps>;
+export default CarouselComponent;

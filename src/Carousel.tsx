@@ -1,4 +1,5 @@
 import React from "react";
+import styled from "@emotion/styled";
 
 export type ImageAsset = {
   url: string;
@@ -32,9 +33,13 @@ export type Carousel = {
 export interface CarouselProps {
   data: Carousel;
 }
+const Container = styled.div(() => ({
+  display: "flex",
+  backgroundColor: "red",
+}));
 
-const Carousel: React.FC<CarouselProps> = ({ data }) => {
-  return <div>{JSON.stringify(data, null, 2)}</div>;
+const CarouselComponent: React.FC<CarouselProps> = ({ data }) => {
+  return <Container>{JSON.stringify(data, null, 2)}</Container>;
 };
 
-export default Carousel;
+export default CarouselComponent;
