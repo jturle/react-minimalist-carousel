@@ -1,0 +1,9 @@
+{
+  "name": "react-minimalist-carousel",
+  "version": "1.0.0",
+  "description": "A minimalist carousel / slider",
+  "main": "index.js",
+  "author": "James Turle<github@turle.com>",
+  "license": "MIT",
+  "private": false
+}
