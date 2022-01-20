@@ -1,9 +1,43 @@
 {
   "name": "react-minimalist-carousel",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "A minimalist carousel / slider",
-  "main": "index.js",
-  "author": "James Turle<github@turle.com>",
+  "author": {
+    "name": "James Turle",
+    "url": "https://turle.com"
+  },
+  "keywords": [
+    "react",
+    "minimalist",
+    "carousel",
+    "signage"
+  ],
+  "homepage": "https://github.com/jturle/react-minimalist-carousel",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jturle/react-minimalist-carousel.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jturle/react-minimalist-carousel/issues"
+  },
   "license": "MIT",
-  "private": false
+  "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.js",
+  "types": "./lib/esm/index.d.ts",
+  "devDependencies": {
+    "@types/react": "^17.0.38",
+    "@types/react-dom": "^17.0.11",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "typescript": "^4.5.4"
+  },
+  "scripts": {
+    "build": "yarn build:esm && yarn build:cjs",
+    "build:esm": "tsc",
+    "build:cjs": "tsc --module commonjs --outDir lib/cjs"
+  },
+  "peerDependencies": {
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2"
+  }
 }
