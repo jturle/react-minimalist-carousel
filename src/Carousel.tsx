@@ -1,43 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "@emotion/styled";
 import CarouselSlide from "./CarouselSlide";
-
-export type ImageAsset = {
-  url: string;
-  alt?: string;
-  mimetype?: string;
-  width?: number;
-  height?: number;
-  filesize?: number;
-};
-
-export type ButtonLink = {
-  label: string;
-  uri: string;
-};
-
-export type Slide = {
-  title?: string;
-  subtitle?: string;
-  background?: ImageAsset;
-  body?: string | React.ReactNode;
-  image?: ImageAsset;
-  caption?: string;
-  button?: ButtonLink;
-  duration?: number;
-};
-
-export type Carousel = {
-  slides: Slide[];
-};
-
-export interface SlideOptions {
-  cover?: boolean;
-}
+import { Carousel, Slide } from "./types";
 
 export interface CarouselProps {
   data: Carousel;
   cover?: boolean;
+  pauseOnHover?: boolean;
+  autoScroll?: boolean;
   defaultDuration?: number;
 }
 
@@ -48,13 +18,19 @@ const Container = styled.div(() => ({
   overflowY: "hidden",
   cursor: "pointer",
   // touchAction: "pan-x", // if you do this - vertical scroll becomes a pain on touch/mobile
-  scrollSnapType: "x mandatory",
   overscrollBehaviorX: "contain",
+  scrollSnapType: "x mandatory",
+  scrollBehavior: "smooth",
+  "::-webkit-scrollbar": {
+    display: "none",
+  },
 }));
 
 const CarouselComponent: React.FC<CarouselProps> = ({
   data,
   cover = false,
+  autoScroll = true,
+  pauseOnHover = true,
   defaultDuration = 2000,
 }) => {
   const [paused, setPaused] = useState<boolean>(false);
@@ -65,10 +41,10 @@ const CarouselComponent: React.FC<CarouselProps> = ({
     return prev + (current?.duration || defaultDuration);
   }, 0);
 
-  // Calculate an offset in ms
+  // Calculate an offset in ms assuming the carousel has been looping since 1970
   const currentOffset = new Date().getTime() % totalTime;
 
-  // Calculate current slideIdx
+  // Calculate startup slide index
   const initialSlideIndex = calculateSlideIndexFromOffset(
     data.slides,
     currentOffset,
@@ -76,22 +52,24 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   );
   const [slideIndex, setSlideIndex] = useState<number>(initialSlideIndex);
 
+  // Auto-play effect - w/ clock sync
   useEffect(() => {
-    if (!paused && data.slides.length > 1) {
-      // const currentOffset = new Date().getTime() % totalTime;
+    if (autoScroll && !paused && data.slides.length > 1) {
+      const { slides } = data;
       const nextSlideIndex =
-        slideIndex + 1 >= data.slides.length ? 0 : slideIndex + 1;
+        slideIndex >= slides.length - 1 ? 0 : slideIndex + 1;
       if (nextSlideIndex) {
         // Calculate when the next slide should switch
         const timeout = setTimeout(
           () => setSlideIndex(nextSlideIndex),
-          data.slides[slideIndex]?.duration || defaultDuration
+          slides[slideIndex]?.duration || defaultDuration
         );
         return () => clearTimeout(timeout);
       } else {
         // The next slide is the first slide...
-        // Creating an exact timeout to ensure everything stays in sync
-        const totalTime = data.slides.reduce((prev, current) => {
+        // Lets creating an exact timeout to keep things perfectly syncronised
+        // Will also re-sync after any manual selection etc.
+        const totalTime = slides.reduce((prev, current) => {
           return prev + (current?.duration || defaultDuration);
         }, 0);
         const resetTimeout = totalTime - (new Date().getTime() % totalTime);
@@ -100,24 +78,19 @@ const CarouselComponent: React.FC<CarouselProps> = ({
       }
     }
     return;
-  }, [paused, slideIndex, setSlideIndex, data, defaultDuration]);
+  }, [paused, autoScroll, slideIndex, setSlideIndex, data, defaultDuration]);
 
+  // Slide update effect
   useEffect(() => {
-    // Auto scroll to current slide
     if (ref.current) {
       const slide = ref.current.children[slideIndex] as HTMLDivElement;
-      // ref.current.scrollLeft = slide.offsetLeft;
-      ref.current.scrollTo({
-        // top: 100,
-        left: slide.offsetLeft,
-        // behavior: "smooth",
-      });
+      ref.current.scrollTo({ left: slide.offsetLeft });
     }
   }, [slideIndex, ref]);
 
-  // Listen for mouse over so we can pause the auto play
+  // Pause effect
   useEffect(() => {
-    if (ref.current) {
+    if (ref.current && pauseOnHover) {
       const mouseEnterListener = () => setPaused(true);
       ref.current.addEventListener("mouseenter", mouseEnterListener);
       const mouseLeaveListener = () => setPaused(false);
@@ -130,7 +103,71 @@ const CarouselComponent: React.FC<CarouselProps> = ({
       };
     }
     return;
-  }, [ref]);
+  }, [ref, pauseOnHover]);
+
+  // Drag effect
+  useEffect(() => {
+    if (ref.current) {
+      const container = ref.current;
+      let panning = false;
+      let initialScrollLeft: number = 0;
+      let initialOffsetX: number = 0;
+      let cleanupTimeout: number;
+
+      const mouseDownListener = (ev: MouseEvent) => {
+        panning = true;
+        initialScrollLeft = container.scrollLeft;
+        initialOffsetX = ev.clientX;
+        // Disable default scroll features...
+        container.style.scrollSnapType = "initial";
+        container.style.scrollBehavior = "initial";
+        if (pauseOnHover) setPaused(true);
+      };
+
+      const mouseMoveListener = (ev: MouseEvent) => {
+        if (panning) {
+          const movementX = initialOffsetX - ev.clientX;
+          container.scrollTo({ left: initialScrollLeft + movementX });
+        }
+      };
+
+      const mouseUpListener = () => {
+        if (panning) {
+          panning = false;
+
+          // Calculate the current index - TODO: Add acceleration?
+          const bestSlideIndex = Math.round(
+            container.scrollLeft / container.offsetWidth
+          );
+          // Get ideal slide...
+          const slide = container.children[bestSlideIndex] as HTMLDivElement;
+          // Scroll to it - smoooooth...
+          container.scrollTo({ left: slide.offsetLeft, behavior: "smooth" });
+
+          // Clear any pending timeouts...
+          if (cleanupTimeout) clearTimeout(cleanupTimeout);
+          // Return to standard behaviour
+          cleanupTimeout = setTimeout(() => {
+            // Re-enable default scroll behaviours
+            container.style.scrollBehavior = "smooth";
+            container.style.scrollSnapType = "x mandatory";
+            if (pauseOnHover) setPaused(false);
+          }, defaultDuration);
+        }
+      };
+
+      container.addEventListener("mousedown", mouseDownListener);
+      window.addEventListener("mousemove", mouseMoveListener); // track the whole window for better
+      window.addEventListener("mouseup", mouseUpListener);
+      return () => {
+        container.removeEventListener("mousedown", mouseDownListener);
+        window.removeEventListener("mousemove", mouseMoveListener);
+        window.removeEventListener("mouseup", mouseUpListener);
+        if (cleanupTimeout) clearTimeout(cleanupTimeout);
+      };
+    }
+    return;
+  }, [ref, defaultDuration]);
 
   return (
     <Container ref={ref}>
@@ -141,11 +178,19 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   );
 };
 
+/**
+ * Calculates the current slide index from a millisecond offset
+ *
+ * @param slides - all of the currently visible slides
+ * @param timeOffset - time into the entire "show", in ms
+ * @param defaultDuration - a default duration for each slide
+ * @returns
+ */
 const calculateSlideIndexFromOffset = (
   slides: Slide[],
   timeOffset: number,
   defaultDuration: number
-) => {
+): number => {
   let durationSpent = 0;
   let idx = -1;
   for (let slide of slides) {

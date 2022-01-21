@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "@emotion/styled";
-import { Slide, SlideOptions } from "./Carousel";
+import { Slide } from "./types";
 
 const SlideContainer = styled.div(() => ({
   scrollSnapAlign: "start",
@@ -11,10 +11,16 @@ const SlideContainer = styled.div(() => ({
   position: "relative",
 }));
 
-const CarouselSlide: React.FC<{
+interface SlideOptions {
+  cover?: boolean;
+}
+
+interface CarouselSlideProps {
   slide: Slide;
   options: SlideOptions;
-}> = ({
+}
+
+const CarouselSlide: React.FC<CarouselSlideProps> = ({
   slide,
   options = {
     cover: false,
