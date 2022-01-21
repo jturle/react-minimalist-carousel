@@ -22,10 +22,15 @@ export declare type Slide = {
     duration?: number;
 };
 export declare type Carousel = {
-    slides: Array<Slide>;
+    slides: Slide[];
 };
+export interface SlideOptions {
+    cover?: boolean;
+}
 export interface CarouselProps {
     data: Carousel;
+    cover?: boolean;
+    defaultDuration?: number;
 }
 declare const CarouselComponent: React.FC<CarouselProps>;
 export default CarouselComponent;
