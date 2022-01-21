@@ -1,7 +1,11 @@
 import React from "react";
-import { Slide, SlideOptions } from "./Carousel";
-declare const CarouselSlide: React.FC<{
+import { Slide } from "./types";
+interface SlideOptions {
+    cover?: boolean;
+}
+interface CarouselSlideProps {
     slide: Slide;
     options: SlideOptions;
-}>;
+}
+declare const CarouselSlide: React.FC<CarouselSlideProps>;
 export default CarouselSlide;
