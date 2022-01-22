@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import styled from "@emotion/styled";
+// import styled from "@emotion/styled";
 import CarouselSlide from "./CarouselSlide";
 import { Carousel, Slide } from "./types";
 
@@ -11,20 +11,20 @@ export interface CarouselProps {
   defaultDuration?: number;
 }
 
-const Container = styled.div(() => ({
-  display: "grid",
-  grid: "1fr / auto-flow 100%",
-  overflowX: "auto",
-  overflowY: "hidden",
-  cursor: "pointer",
-  // touchAction: "pan-x", // if you do this - vertical scroll becomes a pain on touch/mobile
-  overscrollBehaviorX: "contain",
-  scrollSnapType: "x mandatory",
-  scrollBehavior: "smooth",
-  "::-webkit-scrollbar": {
-    display: "none",
-  },
-}));
+// const Container = styled.div(() => ({
+//   display: "grid",
+//   grid: "1fr / auto-flow 100%",
+//   overflowX: "auto",
+//   overflowY: "hidden",
+//   cursor: "pointer",
+//   // touchAction: "pan-x", // if you do this - vertical scroll becomes a pain on touch/mobile
+//   overscrollBehaviorX: "contain",
+//   scrollSnapType: "x mandatory",
+//   scrollBehavior: "smooth",
+//   "::-webkit-scrollbar": {
+//     display: "none",
+//   },
+// }));
 
 const CarouselComponent: React.FC<CarouselProps> = ({
   data,
@@ -170,11 +170,27 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   }, [ref, defaultDuration]);
 
   return (
-    <Container ref={ref}>
+    <div
+      ref={ref}
+      style={{
+        display: "grid",
+        grid: "1fr / auto-flow 100%",
+        overflowX: "auto",
+        overflowY: "hidden",
+        cursor: "pointer",
+        // touchAction: "pan-x", // if you do this - vertical scroll becomes a pain on touch/mobile
+        overscrollBehaviorX: "contain",
+        scrollSnapType: "x mandatory",
+        scrollBehavior: "smooth",
+        // "&::-webkit-scrollbar": {
+        //   display: "none",
+        // },
+      }}
+    >
       {data.slides.map((slide, idx) => {
         return <CarouselSlide key={idx} slide={slide} options={{ cover }} />;
       })}
-    </Container>
+    </div>
   );
 };
 

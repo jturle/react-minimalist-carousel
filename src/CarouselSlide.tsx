@@ -1,15 +1,15 @@
 import React from "react";
-import styled from "@emotion/styled";
+// import styled from "@emotion/styled";
 import { Slide } from "./types";
 
-const SlideContainer = styled.div(() => ({
-  scrollSnapAlign: "start",
-  scrollSnapStop: "always",
-  userSelect: "none",
-  touchAction: "none",
-  pointerEvents: "none",
-  position: "relative",
-}));
+// const SlideContainer = styled.div(() => ({
+//   scrollSnapAlign: "start",
+//   scrollSnapStop: "always",
+//   userSelect: "none",
+//   touchAction: "none",
+//   pointerEvents: "none",
+//   position: "relative",
+// }));
 
 interface SlideOptions {
   cover?: boolean;
@@ -27,7 +27,16 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
   },
 }) => {
   return (
-    <SlideContainer>
+    <div
+      style={{
+        scrollSnapAlign: "start",
+        scrollSnapStop: "always",
+        userSelect: "none",
+        touchAction: "none",
+        pointerEvents: "none",
+        position: "relative",
+      }}
+    >
       {slide.background?.url && (
         <img
           width="100%"
@@ -58,7 +67,7 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
         {slide.caption && <h3>{slide.caption}</h3>}
         {slide.button && <a href={slide.button.uri}>{slide.button.label}</a>}
       </div>
-    </SlideContainer>
+    </div>
   );
 };
 
