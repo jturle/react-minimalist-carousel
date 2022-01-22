@@ -1,5 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
-// import styled from "@emotion/styled";
+import * as React from "react";
 import CarouselSlide from "./CarouselSlide";
 import { Carousel, Slide } from "./types";
 
@@ -33,9 +32,9 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   pauseOnHover = true,
   defaultDuration = 2000,
 }) => {
-  const [paused, setPaused] = useState<boolean>(false);
+  const [paused, setPaused] = React.useState<boolean>(false);
 
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = React.useRef<HTMLDivElement>(null);
   // Calculate the total duration of the carousel/slide show
   const totalTime = data.slides.reduce((prev, current) => {
     return prev + (current?.duration || defaultDuration);
@@ -50,10 +49,10 @@ const CarouselComponent: React.FC<CarouselProps> = ({
     currentOffset,
     defaultDuration
   );
-  const [slideIndex, setSlideIndex] = useState<number>(initialSlideIndex);
+  const [slideIndex, setSlideIndex] = React.useState<number>(initialSlideIndex);
 
   // Auto-play effect - w/ clock sync
-  useEffect(() => {
+  React.useEffect(() => {
     if (autoScroll && !paused && data.slides.length > 1) {
       const { slides } = data;
       const nextSlideIndex =
@@ -81,7 +80,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   }, [paused, autoScroll, slideIndex, setSlideIndex, data, defaultDuration]);
 
   // Slide update effect
-  useEffect(() => {
+  React.useEffect(() => {
     if (ref.current) {
       const slide = ref.current.children[slideIndex] as HTMLDivElement;
       ref.current.scrollTo({ left: slide.offsetLeft });
@@ -89,7 +88,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   }, [slideIndex, ref]);
 
   // Pause effect
-  useEffect(() => {
+  React.useEffect(() => {
     if (ref.current && pauseOnHover) {
       const mouseEnterListener = () => setPaused(true);
       ref.current.addEventListener("mouseenter", mouseEnterListener);
@@ -106,7 +105,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   }, [ref, pauseOnHover]);
 
   // Drag effect
-  useEffect(() => {
+  React.useEffect(() => {
     if (ref.current) {
       const container = ref.current;
       let panning = false;

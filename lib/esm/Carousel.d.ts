@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Carousel } from "./types";
 export interface CarouselProps {
     data: Carousel;

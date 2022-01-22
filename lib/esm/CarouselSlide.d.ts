@@ -1,4 +1,4 @@
-import React from "react";
+import * as React from "react";
 import { Slide } from "./types";
 interface SlideOptions {
     cover?: boolean;
