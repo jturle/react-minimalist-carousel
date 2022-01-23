@@ -32,6 +32,7 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
     cover: false,
   },
 }) => {
+  console.debug("slide", slide);
   return (
     <div
       className={className}

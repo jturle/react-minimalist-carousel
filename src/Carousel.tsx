@@ -37,6 +37,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   pauseOnHover = true,
   defaultDuration = 2000,
 }) => {
+  console.debug("ok", data);
   const [paused, setPaused] = useState<boolean>(false);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -175,7 +176,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
     }
     return;
   }, [ref, defaultDuration]);
-  if (data.slides.length) return null;
+  if (data.slides.length === 0) return null;
   return (
     <div
       ref={ref}
