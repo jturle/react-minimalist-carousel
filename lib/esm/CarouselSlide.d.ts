@@ -5,6 +5,7 @@ interface SlideOptions {
 }
 interface CarouselSlideProps {
     slide: Slide;
+    className: string;
     options: SlideOptions;
 }
 declare const CarouselSlide: React.FC<CarouselSlideProps>;
