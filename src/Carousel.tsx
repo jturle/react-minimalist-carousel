@@ -54,7 +54,9 @@ const CarouselComponent: React.FC<CarouselProps> = ({
     currentOffset,
     defaultDuration
   );
-  const [slideIndex, setSlideIndex] = useState<number>(initialSlideIndex);
+  const [slideIndex, setSlideIndex] = useState<number>(
+    autoScroll ? initialSlideIndex : 0
+  );
 
   // Auto-play effect - w/ clock sync
   useEffect(() => {

@@ -44,7 +44,8 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
         position: "relative",
       }}
     >
-      {slide.background?.url && (
+      {slide.backgroundImage ? slide.backgroundImage : null}
+      {!slide.backgroundImage && slide.background?.url && (
         <img
           alt={slide.background.alt || ""}
           src={slide.background.url}
