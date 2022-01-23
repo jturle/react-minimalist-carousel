@@ -9,6 +9,10 @@ import { Slide } from "./types";
 //   touchAction: "none",
 //   pointerEvents: "none",
 //   position: "relative",
+//   "& img": {
+//     width: "100%",
+//     height: "100%",
+//   },
 // }));
 
 interface SlideOptions {
@@ -17,17 +21,20 @@ interface SlideOptions {
 
 interface CarouselSlideProps {
   slide: Slide;
+  className: string;
   options: SlideOptions;
 }
 
 const CarouselSlide: React.FC<CarouselSlideProps> = ({
   slide,
+  className = "rmc-slide",
   options = {
     cover: false,
   },
 }) => {
   return (
     <div
+      className={className}
       style={{
         scrollSnapAlign: "start",
         scrollSnapStop: "always",
@@ -39,18 +46,17 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
     >
       {slide.background?.url && (
         <img
-          width="100%"
-          height="100%"
           alt={slide.background.alt || ""}
           src={slide.background.url}
           loading="lazy"
           style={{
-            display: "block",
             objectFit: options.cover ? "cover" : "contain",
             objectPosition: "center center",
             userSelect: "none",
             touchAction: "none",
             pointerEvents: "none",
+            width: "100%",
+            height: "100%",
           }}
         />
       )}

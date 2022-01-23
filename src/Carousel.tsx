@@ -1,16 +1,19 @@
-import * as React from "react";
+import React, { useRef, useState, useEffect } from "react";
+// import styled from "@emotion/styled";
 import CarouselSlide from "./CarouselSlide";
 import { Carousel, Slide } from "./types";
 
 export interface CarouselProps {
   data: Carousel;
+  className?: string;
+  slideClassName?: string;
   cover?: boolean;
   pauseOnHover?: boolean;
   autoScroll?: boolean;
   defaultDuration?: number;
 }
 
-// const Container = styled.div(() => ({
+// const CarouselContainer = styled.div(() => ({
 //   display: "grid",
 //   grid: "1fr / auto-flow 100%",
 //   overflowX: "auto",
@@ -27,14 +30,16 @@ export interface CarouselProps {
 
 const CarouselComponent: React.FC<CarouselProps> = ({
   data,
+  className = "rmc-carousel",
+  slideClassName = "rmc-slide",
   cover = false,
   autoScroll = true,
   pauseOnHover = true,
   defaultDuration = 2000,
 }) => {
-  const [paused, setPaused] = React.useState<boolean>(false);
+  const [paused, setPaused] = useState<boolean>(false);
 
-  const ref = React.useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   // Calculate the total duration of the carousel/slide show
   const totalTime = data.slides.reduce((prev, current) => {
     return prev + (current?.duration || defaultDuration);
@@ -49,10 +54,10 @@ const CarouselComponent: React.FC<CarouselProps> = ({
     currentOffset,
     defaultDuration
   );
-  const [slideIndex, setSlideIndex] = React.useState<number>(initialSlideIndex);
+  const [slideIndex, setSlideIndex] = useState<number>(initialSlideIndex);
 
   // Auto-play effect - w/ clock sync
-  React.useEffect(() => {
+  useEffect(() => {
     if (autoScroll && !paused && data.slides.length > 1) {
       const { slides } = data;
       const nextSlideIndex =
@@ -80,7 +85,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   }, [paused, autoScroll, slideIndex, setSlideIndex, data, defaultDuration]);
 
   // Slide update effect
-  React.useEffect(() => {
+  useEffect(() => {
     if (ref.current) {
       const slide = ref.current.children[slideIndex] as HTMLDivElement;
       ref.current.scrollTo({ left: slide.offsetLeft });
@@ -88,7 +93,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   }, [slideIndex, ref]);
 
   // Pause effect
-  React.useEffect(() => {
+  useEffect(() => {
     if (ref.current && pauseOnHover) {
       const mouseEnterListener = () => setPaused(true);
       ref.current.addEventListener("mouseenter", mouseEnterListener);
@@ -105,7 +110,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   }, [ref, pauseOnHover]);
 
   // Drag effect
-  React.useEffect(() => {
+  useEffect(() => {
     if (ref.current) {
       const container = ref.current;
       let panning = false;
@@ -171,6 +176,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   return (
     <div
       ref={ref}
+      className={className}
       style={{
         display: "grid",
         grid: "1fr / auto-flow 100%",
@@ -181,13 +187,17 @@ const CarouselComponent: React.FC<CarouselProps> = ({
         overscrollBehaviorX: "contain",
         scrollSnapType: "x mandatory",
         scrollBehavior: "smooth",
-        // "&::-webkit-scrollbar": {
-        //   display: "none",
-        // },
       }}
     >
       {data.slides.map((slide, idx) => {
-        return <CarouselSlide key={idx} slide={slide} options={{ cover }} />;
+        return (
+          <CarouselSlide
+            key={idx}
+            className={slideClassName}
+            slide={slide}
+            options={{ cover }}
+          />
+        );
       })}
     </div>
   );
