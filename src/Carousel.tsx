@@ -148,7 +148,8 @@ const CarouselComponent: React.FC<CarouselProps> = ({
           // Get ideal slide...
           const slide = container.children[bestSlideIndex] as HTMLDivElement;
           // Scroll to it - smoooooth...
-          container.scrollTo({ left: slide.offsetLeft, behavior: "smooth" });
+          if (slide)
+            container.scrollTo({ left: slide.offsetLeft, behavior: "smooth" });
 
           // Clear any pending timeouts...
           if (cleanupTimeout) clearTimeout(cleanupTimeout);
@@ -174,7 +175,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
     }
     return;
   }, [ref, defaultDuration]);
-
+  if (data.slides.length) return null;
   return (
     <div
       ref={ref}
