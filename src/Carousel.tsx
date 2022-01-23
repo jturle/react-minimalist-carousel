@@ -189,6 +189,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
         overscrollBehaviorX: "contain",
         scrollSnapType: "x mandatory",
         scrollBehavior: "smooth",
+        userSelect: "none",
       }}
     >
       {data.slides.map((slide, idx) => {
