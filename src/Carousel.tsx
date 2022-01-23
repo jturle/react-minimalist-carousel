@@ -90,7 +90,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   useEffect(() => {
     if (ref.current) {
       const slide = ref.current.children[slideIndex] as HTMLDivElement;
-      ref.current.scrollTo({ left: slide.offsetLeft });
+      if (slide) ref.current.scrollTo({ left: slide.offsetLeft });
     }
   }, [slideIndex, ref]);
 
