@@ -91,13 +91,14 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   useEffect(() => {
     if (ref.current) {
       const slide = ref.current.children[slideIndex] as HTMLDivElement;
-      if (slide) ref.current.scrollTo({ left: slide.offsetLeft });
+      if (slide && slide.hasOwnProperty("offsetLeft"))
+        ref.current.scrollTo({ left: slide.offsetLeft });
     }
   }, [slideIndex, ref]);
 
   // Pause effect
   useEffect(() => {
-    if (ref.current && pauseOnHover) {
+    if (ref.current && pauseOnHover && autoScroll) {
       const mouseEnterListener = () => setPaused(true);
       ref.current.addEventListener("mouseenter", mouseEnterListener);
       const mouseLeaveListener = () => setPaused(false);
@@ -110,7 +111,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
       };
     }
     return;
-  }, [ref, pauseOnHover]);
+  }, [ref, pauseOnHover, autoScroll]);
 
   // Drag effect
   useEffect(() => {
@@ -149,7 +150,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
           // Get ideal slide...
           const slide = container.children[bestSlideIndex] as HTMLDivElement;
           // Scroll to it - smoooooth...
-          if (slide)
+          if (slide && slide.hasOwnProperty("offsetLeft"))
             container.scrollTo({ left: slide.offsetLeft, behavior: "smooth" });
 
           // Clear any pending timeouts...
