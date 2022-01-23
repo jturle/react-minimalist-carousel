@@ -1,4 +1,4 @@
-/// <reference types="react" />
+import React from "react";
 export declare type ImageAsset = {
     url: string;
     alt?: string;
@@ -15,6 +15,7 @@ export declare type Slide = {
     title?: string;
     subtitle?: string;
     background?: ImageAsset;
+    backgroundImage?: React.ReactNode;
     body?: string | React.ReactNode;
     image?: ImageAsset;
     caption?: string;
