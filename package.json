@@ -1,6 +1,6 @@
 {
   "name": "react-minimalist-carousel",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A minimalist carousel / slider",
   "author": {
     "name": "James Turle",
@@ -26,8 +26,6 @@
   "types": "./lib/esm/index.d.ts",
   "type": "module",
   "devDependencies": {
-    "@emotion/react": "^11.7.1",
-    "@emotion/styled": "^11.6.0",
     "@types/debug": "^4.1.7",
     "@types/react": "^17.0.38",
     "@types/react-dom": "^17.0.11",
@@ -42,11 +40,9 @@
     "build:cjs": "tsc --module commonjs --outDir lib/cjs"
   },
   "peerDependencies": {
-    "next": "^12.0.8",
+    "debug": "^4.3.3",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
   },
-  "dependencies": {
-    "debug": "^4.3.3"
-  }
+  "dependencies": {}
 }
