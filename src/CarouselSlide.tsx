@@ -1,7 +1,6 @@
 import * as React from "react";
 // import styled from "@emotion/styled";
 import { Slide } from "./types";
-
 // const SlideContainer = styled.div(() => ({
 //   scrollSnapAlign: "start",
 //   scrollSnapStop: "always",
@@ -32,7 +31,6 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
     cover: false,
   },
 }) => {
-  console.debug("slide", slide);
   return (
     <div
       className={className}
@@ -45,7 +43,7 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
         position: "relative",
       }}
     >
-      {slide.backgroundImage ? slide.backgroundImage : null}
+      {slide.backgroundImage}
       {!slide.backgroundImage && slide.background?.url && (
         <img
           alt={slide.background.alt || ""}

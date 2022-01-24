@@ -15,7 +15,7 @@ export declare type Slide = {
     title?: string;
     subtitle?: string;
     background?: ImageAsset;
-    backgroundImage?: React.ReactNode;
+    backgroundImage?: any;
     body?: string | React.ReactNode;
     image?: ImageAsset;
     caption?: string;
