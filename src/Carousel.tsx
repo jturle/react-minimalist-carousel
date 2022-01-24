@@ -1,10 +1,10 @@
 import React, { useRef, useState, useEffect } from "react";
-// import styled from "@emotion/styled";
 import CarouselSlide from "./CarouselSlide";
 import { Carousel, Slide } from "./types";
-import debug from "debug";
-const d = debug("rmc");
-debug.enable("*");
+// import debug from "debug";
+// const d = debug("rmc");
+// debug.enable("*");
+
 export interface CarouselProps {
   data: Carousel;
   className?: string;
@@ -13,22 +13,8 @@ export interface CarouselProps {
   pauseOnHover?: boolean;
   autoScroll?: boolean;
   defaultDuration?: number;
+  draggable?: boolean;
 }
-
-// const CarouselContainer = styled.div(() => ({
-//   display: "grid",
-//   grid: "1fr / auto-flow 100%",
-//   overflowX: "auto",
-//   overflowY: "hidden",
-//   cursor: "pointer",
-//   // touchAction: "pan-x", // if you do this - vertical scroll becomes a pain on touch/mobile
-//   overscrollBehaviorX: "contain",
-//   scrollSnapType: "x mandatory",
-//   scrollBehavior: "smooth",
-//   "::-webkit-scrollbar": {
-//     display: "none",
-//   },
-// }));
 
 const CarouselComponent: React.FC<CarouselProps> = ({
   data,
@@ -37,9 +23,10 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   cover = false,
   autoScroll = true,
   pauseOnHover = true,
+  draggable = false,
   defaultDuration = 2000,
 }) => {
-  d("data", data);
+  // d("data", data);
   const [paused, setPaused] = useState<boolean>(false);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -92,14 +79,16 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   // Slide update effect
   useEffect(() => {
     if (ref.current) {
-      const slide = ref.current.children[slideIndex] as HTMLDivElement;
-      if (slide) ref.current.scrollTo({ left: slide?.offsetLeft || 0 });
+      const slide = ref.current.childNodes[slideIndex] as HTMLDivElement;
+      if (slide) {
+        ref.current.scrollTo({ left: slide.offsetLeft });
+      }
     }
   }, [slideIndex, ref]);
 
   // Pause effect
   useEffect(() => {
-    if (ref.current && pauseOnHover && autoScroll) {
+    if (pauseOnHover && autoScroll && ref.current) {
       const mouseEnterListener = () => setPaused(true);
       ref.current.addEventListener("mouseenter", mouseEnterListener);
       const mouseLeaveListener = () => setPaused(false);
@@ -116,7 +105,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
 
   // Drag effect
   useEffect(() => {
-    if (ref.current) {
+    if (draggable && ref.current) {
       const container = ref.current;
       let panning = false;
       let initialScrollLeft: number = 0;
@@ -180,8 +169,10 @@ const CarouselComponent: React.FC<CarouselProps> = ({
       };
     }
     return;
-  }, [ref, defaultDuration]);
+  }, [ref, draggable, defaultDuration]);
+
   if (data.slides.length === 0) return null;
+
   return (
     <div
       ref={ref}
@@ -197,6 +188,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
         scrollSnapType: "x mandatory",
         scrollBehavior: "smooth",
         userSelect: "none",
+        position: "relative", // required to support iOS offsetLeft scroll positioning
       }}
     >
       {data.slides.map((slide, idx) => {

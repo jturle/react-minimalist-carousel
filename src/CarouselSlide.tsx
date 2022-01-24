@@ -1,18 +1,5 @@
 import * as React from "react";
-// import styled from "@emotion/styled";
 import { Slide } from "./types";
-// const SlideContainer = styled.div(() => ({
-//   scrollSnapAlign: "start",
-//   scrollSnapStop: "always",
-//   userSelect: "none",
-//   touchAction: "none",
-//   pointerEvents: "none",
-//   position: "relative",
-//   "& img": {
-//     width: "100%",
-//     height: "100%",
-//   },
-// }));
 
 interface SlideOptions {
   cover?: boolean;
