@@ -93,8 +93,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   useEffect(() => {
     if (ref.current) {
       const slide = ref.current.children[slideIndex] as HTMLDivElement;
-      if (slide && slide.hasOwnProperty("offsetLeft"))
-        ref.current.scrollTo({ left: slide.offsetLeft });
+      if (slide) ref.current.scrollTo({ left: slide?.offsetLeft || 0 });
     }
   }, [slideIndex, ref]);
 
@@ -152,8 +151,11 @@ const CarouselComponent: React.FC<CarouselProps> = ({
           // Get ideal slide...
           const slide = container.children[bestSlideIndex] as HTMLDivElement;
           // Scroll to it - smoooooth...
-          if (slide && slide.hasOwnProperty("offsetLeft"))
-            container.scrollTo({ left: slide.offsetLeft, behavior: "smooth" });
+          if (slide)
+            container.scrollTo({
+              left: slide?.offsetLeft || 0,
+              behavior: "smooth",
+            });
 
           // Clear any pending timeouts...
           if (cleanupTimeout) clearTimeout(cleanupTimeout);
