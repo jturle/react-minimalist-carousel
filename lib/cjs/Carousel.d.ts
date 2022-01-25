@@ -9,6 +9,7 @@ export interface CarouselProps {
     autoScroll?: boolean;
     defaultDuration?: number;
     draggable?: boolean;
+    columns?: 1 | 2;
 }
 declare const CarouselComponent: React.FC<CarouselProps>;
 export default CarouselComponent;

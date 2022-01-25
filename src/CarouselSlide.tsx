@@ -33,6 +33,7 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
       {slide.backgroundImage}
       {!slide.backgroundImage && slide.background?.url && (
         <img
+          className="rmc-background"
           alt={slide.background.alt || ""}
           src={slide.background.url}
           loading="lazy"
@@ -51,14 +52,17 @@ const CarouselSlide: React.FC<CarouselSlideProps> = ({
         style={{
           position: "absolute",
           inset: 0,
-          color: "white",
         }}
       >
-        {slide.title && <h1>{slide.title}</h1>}
-        {slide.subtitle && <h2>{slide.subtitle}</h2>}
-        {slide.body && <div>{slide.body}</div>}
-        {slide.caption && <h3>{slide.caption}</h3>}
-        {slide.button && <a href={slide.button.uri}>{slide.button.label}</a>}
+        {slide.title && <h1 className="rmc-title">{slide.title}</h1>}
+        {slide.subtitle && <h2 className="rmc-subtitle">{slide.subtitle}</h2>}
+        {slide.body && <div className="rmc-body">{slide.body}</div>}
+        {slide.caption && <h3 className="rmc-caption">{slide.caption}</h3>}
+        {slide.button && (
+          <a className="rmc-button" href={slide.button.uri}>
+            {slide.button.label}
+          </a>
+        )}
       </div>
     </div>
   );

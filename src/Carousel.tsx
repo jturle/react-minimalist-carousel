@@ -14,6 +14,7 @@ export interface CarouselProps {
   autoScroll?: boolean;
   defaultDuration?: number;
   draggable?: boolean;
+  columns?: 1 | 2;
 }
 
 const CarouselComponent: React.FC<CarouselProps> = ({
@@ -25,6 +26,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   pauseOnHover = true,
   draggable = false,
   defaultDuration = 2000,
+  columns = 1,
 }) => {
   // d("data", data);
   const [paused, setPaused] = useState<boolean>(false);
@@ -179,7 +181,11 @@ const CarouselComponent: React.FC<CarouselProps> = ({
       className={className}
       style={{
         display: "grid",
-        grid: "1fr / auto-flow 100%",
+        gridAutoFlow: "column",
+        gridAutoColumns: columns === 2 ? `calc(50% - 8px)` : "100%",
+        gridAutoRows: "1fr",
+        gridGap: columns === 2 ? 16 : 0,
+        // grid: "1fr / auto-flow 50%",
         overflowX: "auto",
         overflowY: "hidden",
         cursor: "pointer",
