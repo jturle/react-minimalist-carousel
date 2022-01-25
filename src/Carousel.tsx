@@ -1,9 +1,6 @@
 import React, { useRef, useState, useEffect } from "react";
 import CarouselSlide from "./CarouselSlide";
 import { Carousel, Slide } from "./types";
-// import debug from "debug";
-// const d = debug("rmc");
-// debug.enable("*");
 
 export interface CarouselProps {
   data: Carousel;
@@ -28,7 +25,6 @@ const CarouselComponent: React.FC<CarouselProps> = ({
   defaultDuration = 2000,
   columns = 1,
 }) => {
-  // d("data", data);
   const [paused, setPaused] = useState<boolean>(false);
 
   const ref = useRef<HTMLDivElement>(null);
@@ -171,7 +167,7 @@ const CarouselComponent: React.FC<CarouselProps> = ({
       };
     }
     return;
-  }, [ref, draggable, defaultDuration]);
+  }, [ref, draggable, defaultDuration, pauseOnHover, setPaused]);
 
   if (data.slides.length === 0) return null;
 

@@ -10,7 +10,7 @@ This library is provided _as-is_ - any futher development is pretty unlikely, as
 
 This carousel / slider / marquee library is similar to a thousand others however it does sport **one pretty useful feature** for digital signage usage. When used with the `autoScroll` property enabled the content will automatically syncronise slide updates across all devices within the same timezone - assuming the OS is properly sychronizing the system clock with a NTP server or similar. Good news is - i'd say all operating systems do this out-of-the-box already.
 
-Other than that, the functionality is similar to most other libraries, however content is provided via a data object rather than children.
+Other than that, the functionality is similar to most other libraries, however content is provided via a data object rather than children. Also the library should support [Next.js](https://nextjs.org) SSG & SSR.
 
 ## Installation
 
